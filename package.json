@@ -1,8 +1,8 @@
 {
-  "name": "marionette-forms",
+  "name": "marionette-fields",
   "version": "0.0.1",
   "description": "Trying to easy the form creation and maintainability of forms inside a Marionete view.",
-  "main": "src/marionette-forms.js",
+  "main": "src/marionette-fields.js",
   "scripts": {
     "test": "./node_modules/.bin/jest --verbose --coverage",
     "test:update": "./node_modules/.bin/jest --verbose --coverage --updateSnapshot",
@@ -11,20 +11,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/duo-criativa/marionette-forms.git"
+    "url": "git+https://github.com/duo-criativa/marionette-fields.git"
   },
   "keywords": [
     "marionette",
     "marionette.js",
     "form",
-    "forms"
+    "forms",
+    "fields"
   ],
   "author": "Paulo Ribeiro <paulo@duocriativa.com.br>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/duo-criativa/marionette-forms/issues"
+    "url": "https://github.com/duo-criativa/marionette-fields/issues"
   },
-  "homepage": "https://github.com/duo-criativa/marionette-forms#readme",
+  "homepage": "https://github.com/duo-criativa/marionette-fields#readme",
   "devDependencies": {
     "backbone": "^1.3.3",
     "jest": "^23.1.0",
