@@ -237,5 +237,40 @@ describe('InputView', function() {
 
     });
 
+    test('should show `helpMessage`', function() {
+      var input = new InputView({});
+
+      input.render();
+
+      expect(input.$('[data-hook=help-message]').css('display')).toBe('none');
+      expect(input.$('[data-hook=help-message]').text()).toBe('');
+
+      input.state.helpMessage = 'This is a tip.';
+
+      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
+      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
+
+    });
+
+    test('initialize with `helpMessage`', function() {
+      var input = new InputView({helpMessage: 'This is a tip.'});
+
+      input.render();
+
+      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
+      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
+
+    });
+
+    test('extend with `helpMessage`', function() {
+      var input = new (InputView.extend({helpMessage: 'This is a tip.'}));
+
+      input.render();
+
+      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
+      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
+
+    });
+
   });
 });

@@ -206,6 +206,7 @@ var InputView = Mn.View.extend({
     }
     this.state = new InputState();
     this.state.tests = this.tests || spec.tests || [];
+    this.state.helpMessage = this.helpMessage || spec.helpMessage || '';
     this.listenTo(this.state, 'change:type', this.handleTypeChange, this);
     this.handleChange = this.handleChange.bind(this);
     this.handleInputChanged = this.handleInputChanged.bind(this);
