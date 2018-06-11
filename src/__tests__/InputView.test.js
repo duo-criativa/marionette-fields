@@ -2,6 +2,16 @@ var Mn = require('backbone.marionette');
 var InputView = require('../InputView');
 var FormView = require('../FormView');
 
+var customTemplate = '<label class="custominput"><span data-hook="label"></span><input><div data-hook="message-container"><p data-hook="message-text"></p></div></label>';
+
+function isHidden(el) {
+  return el.style.display === 'none';
+}
+
+function hasClass(el, klass) {
+  return el.classList.contains(klass);
+}
+
 describe('InputView', function() {
 
   describe('requirements', function() {
@@ -71,9 +81,6 @@ describe('InputView', function() {
       var view = new InputView({name: 'last_name', value: 'initial name', parent: parent});
 
       expect(view.state.valid).toBeTruthy();
-      view.listenTo(view.state, 'all', function(eventName, a, b) {
-        console.info(eventName, typeof(a) ==='object' ? '': a, typeof(b) ==='object' ? '': b);
-      });
 
       view.setValue('Last Name');
       expect(count).toBe(1);
@@ -92,4 +99,143 @@ describe('InputView', function() {
 
   });
 
+  describe('behavior', function() {
+
+    test('initialize with number value and type preserved after render', function () {
+      var position = 1;
+      var input = new InputView({
+        name: 'position',
+        value: position,
+        type: 'number'
+      });
+
+      expect(input.getValue()).toBe(position);
+
+      input.render();
+
+      expect(input.$el.find('input').attr('type')).toBe('number');
+      expect(input.el.outerHTML).toMatchSnapshot();
+    });
+
+    test('can initialize with template without having to extend', function () {
+      var input = new InputView({
+        name: 'title',
+        value: 'Once upon a time',
+        template: customTemplate
+      });
+
+      input.render();
+
+      expect(input.$('> label').hasClass('custominput')).toBeTruthy();
+    });
+
+    test('should be able to extend a template as well', function () {
+      var input = new (InputView.extend({
+        template: function(){ return customTemplate;}
+      }))({name: 'title',
+        value: 'Once upon a time',
+      });
+
+      input.render();
+
+      expect(input.$('> label').hasClass('custominput')).toBeTruthy();
+    });
+
+    test('reset value', function () {
+      var input = new InputView({
+        name: 'title'
+      });
+      input.render();
+      input.setValue('something');
+      expect(input.ui.input.val()).toBe('something');
+      input.reset();
+      expect(input.ui.input.val()).toBe('');
+
+      var input2 = new InputView({
+        name: 'title',
+        value: 'start'
+      });
+      input2.render();
+      expect(input2.ui.input.val()).toBe('start');
+      input2.setValue('somethingelse');
+      expect(input2.ui.input.val()).toBe('somethingelse');
+      input2.reset();
+      expect(input2.ui.input.val()).toBe('start');
+
+      input.beforeSubmit(); //Turn on shouldValidate
+      input.reset();
+      expect(input.state.shouldValidate).toBe(false);
+    });
+
+    test('clear', function () {
+      var input = new InputView({
+        name: 'title',
+        value: 'something'
+      });
+      input.render();
+
+      expect(input.ui.input.val()).toBe('something');
+      input.reset();
+      expect(input.ui.input.val()).toBe('something');
+      input.clear();
+      expect(input.ui.input.val()).toBe('');
+      expect(input.getValue()).toBe('');
+
+      var input2 = new InputView({
+        name: 'thing'
+      });
+      input2.render();
+      expect(input2.getValue()).toBe('');
+      input2.setValue('thing');
+      expect(input2.ui.input.val()).toBe('thing');
+      expect(input2.getValue()).toBe('thing');
+      input2.clear();
+      expect(input2.ui.input.val()).toBe('');
+      expect(input2.getValue()).toBe('');
+
+      input.beforeSubmit(); //Turn on shouldValidate
+      input.clear();
+      expect(input.state.shouldValidate).toBe(false);
+    });
+
+    test('initalize with a value of `0`', function() {
+      var input = new InputView({
+        name: 'title',
+        type: 'number',
+        value: 0
+      });
+
+      input.render();
+
+      expect(parseFloat(input.ui.input.val())).toBe(0);
+    });
+
+    test('value `0` should be treated as a valid value if required is set to true', function() {
+      var input = new InputView({
+        name: 'title',
+        type: 'number',
+        value: 0,
+        required: true
+      });
+
+      input.render();
+
+      // var inputElement = input.el.querySelector('input');
+      // var messageContainer = input.el.querySelector('[data-hook=message-container]');
+
+      expect(input.$('[data-hook=message-container]').css('display')).toBe('none');
+
+      // inputElement.value = 1;
+      // input.handleInputChanged();
+      // input.handleChange();
+      // t.ok(isHidden(messageContainer), 'Message should not be visible');
+      //
+      // inputElement.value = 0;
+      // input.handleInputChanged();
+      // input.handleChange();
+      // t.ok(isHidden(messageContainer), 'Message should not be visible');
+
+    });
+
+  });
 });

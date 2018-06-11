@@ -86,15 +86,15 @@ var InputState = State.extend({
     }
   },
   runTests: function () {
-    var message = this.getErrorMessage();
-    if (!message && this.inputValue && this.changed) {
+    var errorMessage = this.getErrorMessage();
+    if (!errorMessage && this.inputValue && this.changed) {
       // if it's ever been valid,
       // we want to validate from now
       // on.
       this.shouldValidate = true;
     }
-    this.message = message;
-    return message;
+    this.message = errorMessage;
+    return errorMessage;
   },
 
 });
@@ -107,7 +107,7 @@ var InputView = Mn.View.extend({
   },
   template: function() {
     return  [
-      '<label data-hook="label" for="exampleInputEmail1"></label>',
+      '<label data-hook="label"></label>',
       '<input class="form-control">',
       '<div data-hook="message-container" class="message message-below message-error">',
       '<p data-hook="message-text"></p>',
@@ -130,6 +130,11 @@ var InputView = Mn.View.extend({
       type: 'attribute',
       selector: 'input, textarea',
       name: 'name'
+    },
+    'state.type': {
+      type: 'attribute',
+      selector: 'input',
+      name: 'type'
     },
     'state.tabindex': {
       type: 'attribute',
@@ -198,10 +203,10 @@ var InputView = Mn.View.extend({
     this.listenTo(this.state, 'change:value', this.reportToParent);
     this.listenTo(this.state, 'change:validityClass', this.validityClassChanged);
     if (spec.autoRender) this.autoRender = spec.autoRender;
-    if (spec.template) this.template = spec.template;
+    if (spec.template) this.template = function(){ return spec.template;};
     if (spec.beforeSubmit) this.beforeSubmit = spec.beforeSubmit;
 
-    this.state.set(pick(spec, ['name', 'value', 'id', 'tabindex', 'label', 'message', 'showMessage', 'placeholder', 'readonly', 'autofocus']))
+    this.state.set(pick(spec, ['name', 'value', 'type', 'id', 'tabindex', 'label', 'message', 'placeholder', 'readonly', 'autofocus']))
   },
 
   getName: function() {
@@ -213,10 +218,10 @@ var InputView = Mn.View.extend({
   },
 
   onRender: function () {
+    this.handleTypeChange();
     /*this.renderWithTemplate();
     this.input = this.query('input') || this.query('textarea');
     // switches out input for textarea if that's what we want
-    this.handleTypeChange();
     this.initInputBindings();
     // Skip validation on initial setValue
     // if the field is not required
@@ -244,18 +249,12 @@ var InputView = Mn.View.extend({
     }
   },
   handleTypeChange: function () {
-    // todo: review handleTypeChange
-    return;
-    /*if (this.state.type === 'textarea' && !this.ui.input.is('textarea')) {
+    if (typeof(this.ui.input) === 'string') {
+      return;
+    }
+    if (this.state.type === 'textarea' && !this.ui.input.is('textarea')) {
       throw new Error("type === 'textarea', but element is not. You probably forgot to overwrite the template.");
-      var parent = this.input.parentNode;
-      var textarea = document.createElement('textarea');
-      parent.replaceChild(textarea, this.input);
-      this.input = textarea;
-      this._applyBindingsForKey('');
-    } else {
-      this.input.type = this.state.type;
-    }*/
+    }
   },
   clean: function (val) {
     return (this.state.type === 'number') ? Number(val) : val.trim();
@@ -278,7 +277,7 @@ var InputView = Mn.View.extend({
     // catch undetected input changes that were not caught due to lack of
     // browser event firing see:
     // https://github.com/AmpersandJS/ampersand-input-view/issues/2
-    this.inputValue = this.clean(this.ui.input.val());
+    this.state.inputValue = this.clean(this.ui.input.val());
 
     // at the point where we've tried
     // to submit, we want to validate
