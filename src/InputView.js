@@ -17,6 +17,7 @@ var InputState = State.extend({
     placeholder: ['string', true, ''],
     label: ['string', true, ''],
     required: ['boolean', true, true],
+    helpMessage: ['string', true, ''],
     directlyEdited: ['boolean', true, false],
     readonly: ['boolean', true, false],
     autofocus: ['boolean', true, false],
@@ -26,7 +27,7 @@ var InputState = State.extend({
     validClass: ['string', true, 'input-valid'],
     invalidClass: ['string', true, 'input-invalid'],
     validityClassSelector: ['string', true, 'input, textarea'],
-    tabindex: ['number', true, 0]
+    tabindex: ['number', true, 0],
   },
 
   derived: {
@@ -109,6 +110,7 @@ var InputView = Mn.View.extend({
     return  [
       '<label data-hook="label"></label>',
       '<input class="form-control">',
+      '<p data-hook="help-message"></p>',
       '<div data-hook="message-container" class="message message-below message-error">',
       '<p data-hook="message-text"></p>',
       '</div>',
@@ -185,7 +187,17 @@ var InputView = Mn.View.extend({
       type: 'booleanAttribute',
       name: 'autofocus',
       selector: 'input, textarea'
-    }
+    },
+    'state.helpMessage': [
+      {
+        type: 'toggle',
+        hook: 'help-message'
+      },
+      {
+        type: 'text',
+        hook: 'help-message'
+      }
+    ]
   },
   initialize: function (spec) {
     spec || (spec = {});
