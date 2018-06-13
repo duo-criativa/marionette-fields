@@ -11,12 +11,16 @@ var FormView = Mn.View.extend({
   buildFieldTemplate: function(fieldName) {
     return '<div data-hook="field-' + fieldName + '"></div>';
   },
-  getTemplate: function() {
+  buildFormTemplate: function() {
     var template = '';
     var names = this._getFieldNames();
     for (var i = 0; i < names.length; i++) {
       template += this.buildFieldTemplate(names[i]);
     }
+    return template;
+  },
+  getTemplate: function() {
+    var template = this.buildFormTemplate();
     return function() {
       return template;
     };
@@ -55,17 +59,13 @@ var FormView = Mn.View.extend({
       this.on('submit', this.submitCallback);
     }
 
-    var regions = this.getRegions();
     var self = this;
-
     this.listenTo(this, 'render', function() {
       var fields = self.getFields();
       for (var name in fields) {
         if (!fields.hasOwnProperty(name)) {
           continue;
         }
-        var region = self.getRegion(name);
-        var regions = self.getRegions();
         self.showChildView(name, fields[name]);
       }
     });
