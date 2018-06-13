@@ -13,9 +13,9 @@ var FormView = Mn.View.extend({
   },
   getTemplate: function() {
     var template = '';
-    var fields = this.getOption('fields');
-    for (var key in fields) {
-      template += this.buildFieldTemplate(fields[key].getName());
+    var names = this._getFieldNames();
+    for (var i = 0; i < names.length; i++) {
+      template += this.buildFieldTemplate(names[i]);
     }
     return function() {
       return template;
@@ -23,9 +23,9 @@ var FormView = Mn.View.extend({
   },
   regions: function() {
     var regions = {};
-    var fields = this.getOption('fields');
-    for (var key in fields) {
-      var name = fields[key].getName();
+    var names = this._getFieldNames();
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
       regions[name] = '[data-hook="field-' + name + '"]';
     }
     return regions;
@@ -36,26 +36,12 @@ var FormView = Mn.View.extend({
   },
 
   initializeForm: function(options) {
-    var fields = options.fields || this.fields;
-    if (!fields) {
-      throw new Error('You must pass `fields` of form.');
-    }
-    this.fields = fields;
 
     this.validCallback = options.validCallback || this.validCallback;
     this.submitCallback = options.submitCallback || this.submitCallback;
     this.clean = options.clean || this.clean || function(res) {
       return res;
     };
-
-    // storage for our fields
-    this._fieldViews = {};
-    this._fieldViewsArray = [];
-
-    for (var key in fields) {
-      fields[key].parent = this;
-      this.addField(fields[key]);
-    }
 
     if (options.values) this._startingValues = options.values;
 
@@ -68,14 +54,20 @@ var FormView = Mn.View.extend({
     if (this.submitCallback) {
       this.on('submit', this.submitCallback);
     }
-  },
 
-  onRender: function() {
+    var regions = this.getRegions();
     var self = this;
-    var fields = this.fields;
-    fields.forEach(function(field) {
-      var name = field.getName();
-      self.showChildView(name, field);
+
+    this.listenTo(this, 'render', function() {
+      var fields = self.getFields();
+      for (var name in fields) {
+        if (!fields.hasOwnProperty(name)) {
+          continue;
+        }
+        var region = self.getRegion(name);
+        var regions = self.getRegions();
+        self.showChildView(name, fields[name]);
+      }
     });
   },
 
@@ -95,11 +87,45 @@ var FormView = Mn.View.extend({
   },
 
   getField: function(fieldName, strict) {
-    var field = this._fieldViews[name];
+    var field = this.getFields()[name];
     if (!field && strict) {
       throw new ReferenceError('field name  "' + name + '" not found');
     }
     return field;
+  },
+
+  getFields: function() {
+    if (this._fieldViews === undefined) {
+      var fields = this.getOption('fields') || this.fields;
+      if (!fields) {
+        throw new Error('You must pass `fields` of form.');
+      }
+      if (typeof(fields) == 'function') {
+        fields = fields.call(this);
+      }
+      // storage for our fields
+      this._fieldViews = {};
+      this._fieldViewsArray = [];
+
+      for (var key in fields) {
+        fields[key].parent = this;
+        this.addField(fields[key]);
+      }
+    }
+    return this._fieldViews;
+  },
+
+  getFieldsArray: function() {
+    this.getFields();
+    return this._fieldViewsArray;
+  },
+
+  _getFieldNames: function() {
+    var names = [];
+    for(var name in this.getFields()) {
+      names.push(name);
+    }
+    return names;
   },
 
   getValue: function(name) {
@@ -120,14 +146,14 @@ var FormView = Mn.View.extend({
   },
 
   checkValid: function() {
-    this.valid = this._fieldViewsArray.every(function(field) {
+    this.valid = this.getFieldsArray().every(function(field) {
       return field.valid;
     });
     return this.valid;
   },
 
   beforeSubmit: function() {
-    this._fieldViewsArray.forEach(function(field) {
+    this.getFieldsArray().forEach(function(field) {
       if (field.beforeSubmit) field.beforeSubmit();
     });
   },
@@ -158,7 +184,7 @@ var FormView = Mn.View.extend({
   },
 
   reset: function() {
-    this._fieldViewsArray.forEach(function(field) {
+    this.getFieldsArray().forEach(function(field) {
       if (isFunction(field.reset)) {
         field.reset();
       }
@@ -166,7 +192,7 @@ var FormView = Mn.View.extend({
   },
 
   clear: function() {
-    this._fieldViewsArray.forEach(function(field) {
+    this.getFieldsArray().forEach(function(field) {
       if (isFunction(field.clear)) {
         field.clear();
       }
