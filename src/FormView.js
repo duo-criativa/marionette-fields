@@ -39,6 +39,10 @@ var FormView = Mn.View.extend({
     this.initializeForm(options || {});
   },
 
+  events: {
+    'submit': 'handleSubmit'
+  },
+
   initializeForm: function(options) {
 
     this.validCallback = options.validCallback || this.validCallback;
@@ -46,6 +50,8 @@ var FormView = Mn.View.extend({
     this.clean = options.clean || this.clean || function(res) {
       return res;
     };
+
+    this.preventDefault = options.preventDefault === false ? false : true;
 
     if (options.values) this._startingValues = options.values;
 
