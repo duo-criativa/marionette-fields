@@ -50,13 +50,13 @@ var FormView = Mn.View.extend({
     if (options.values) this._startingValues = options.values;
 
     if (this.validCallback) {
-      this.on('valid', function(view, validBool) {
+      this.listenTo(this, 'valid', function(view, validBool) {
         this.validCallback(validBool);
       });
     }
 
     if (this.submitCallback) {
-      this.on('submit', this.submitCallback);
+      this.listenTo(this, 'submit', this.submitCallback);
     }
 
     var self = this;
