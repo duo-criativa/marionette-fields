@@ -215,11 +215,16 @@ var InputView = Mn.View.extend({
     this.state.inputValue = value;
     this.listenTo(this.state, 'change:value', this.reportToParent);
     this.listenTo(this.state, 'change:validityClass', this.validityClassChanged);
-    if (spec.autoRender) this.autoRender = spec.autoRender;
-    if (spec.template) this.template = function(){ return spec.template;};
-    if (spec.beforeSubmit) this.beforeSubmit = spec.beforeSubmit;
+    if (spec.template) {
+      this.template = spec.template;
+      delete spec.template;
+    }
+    if (spec.beforeSubmit) {
+      this.beforeSubmit = spec.beforeSubmit;
+      delete spec.beforeSubmit;
+    }
 
-    this.state.set(pick(spec, ['name', 'value', 'type', 'id', 'tabindex', 'label', 'message', 'placeholder', 'readonly', 'autofocus']))
+    this.state.set(spec);
   },
 
   getName: function() {

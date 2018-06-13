@@ -121,7 +121,7 @@ describe('InputView', function() {
       var input = new InputView({
         name: 'title',
         value: 'Once upon a time',
-        template: customTemplate
+        template: function(){ return customTemplate; }
       });
 
       input.render();
