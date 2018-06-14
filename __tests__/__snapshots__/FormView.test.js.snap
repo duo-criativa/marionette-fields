@@ -1,3 +1,154 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` 1`] = `"<form><div data-hook=\\"field-client_name\\"><div class=\\"form-group\\"><label data-hook=\\"label\\" for=\\"form_field_client_name\\">App Name</label><input class=\\"form-control\\" value=\\"hello\\" name=\\"client_name\\" type=\\"text\\" tabindex=\\"0\\" id=\\"form_field_client_name\\" placeholder=\\"My Awesome App\\"><small data-hook=\\"help-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></small><div data-hook=\\"validation-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></div></div></div></form>"`;
+exports[`FormView render should add was-validated class to form element 1`] = `
+<form>
+  <div
+    data-hook="field-name"
+  >
+    <div
+      class="form-group"
+    >
+      <label
+        data-hook="label"
+        for="form_field_name"
+      >
+        Your name
+      </label>
+      <input
+        class="form-control"
+        id="form_field_name"
+        name="name"
+        placeholder=""
+        tabindex="0"
+        type="text"
+        value=""
+      />
+      <small
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="help-message"
+        style="display: none;"
+      />
+      <div
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="validation-message"
+        style="display: none;"
+      />
+    </div>
+  </div>
+  <div
+    data-hook="field-age"
+  >
+    <div
+      class="form-group"
+    >
+      <label
+        data-hook="label"
+        for="form_field_age"
+      >
+        Your age
+      </label>
+      <input
+        class="form-control"
+        id="form_field_age"
+        name="age"
+        placeholder=""
+        tabindex="0"
+        type="text"
+        value=""
+      />
+      <small
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="help-message"
+        style="display: none;"
+      />
+      <div
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="validation-message"
+        style="display: none;"
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`FormView render should add was-validated class to form element 2`] = `
+<form
+  class="was-validated"
+>
+  <div
+    data-hook="field-name"
+  >
+    <div
+      class="form-group"
+    >
+      <label
+        data-hook="label"
+        for="form_field_name"
+      >
+        Your name
+      </label>
+      <input
+        class="form-control is-valid"
+        id="form_field_name"
+        name="name"
+        placeholder=""
+        tabindex="0"
+        type="text"
+        value="test"
+      />
+      <small
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="help-message"
+        style="display: none;"
+      />
+      <div
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="validation-message"
+        style="display: none;"
+      />
+    </div>
+  </div>
+  <div
+    data-hook="field-age"
+  >
+    <div
+      class="form-group"
+    >
+      <label
+        data-hook="label"
+        for="form_field_age"
+      >
+        Your age
+      </label>
+      <input
+        class="form-control is-invalid"
+        id="form_field_age"
+        name="age"
+        placeholder=""
+        tabindex="0"
+        type="text"
+        value=""
+      />
+      <small
+        data-anddom-display=""
+        data-anddom-hidden="true"
+        data-hook="help-message"
+        style="display: none;"
+      />
+      <div
+        data-anddom-display=""
+        data-hook="validation-message"
+        style=""
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`FormView render should have HTML like this 1`] = `"<form><div data-hook=\\"field-client_name\\"><div class=\\"form-group\\"><label data-hook=\\"label\\" for=\\"form_field_client_name\\">App Name</label><input class=\\"form-control\\" value=\\"hello\\" name=\\"client_name\\" type=\\"text\\" tabindex=\\"0\\" id=\\"form_field_client_name\\" placeholder=\\"My Awesome App\\"><small data-hook=\\"help-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></small><div data-hook=\\"validation-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></div></div></div></form>"`;

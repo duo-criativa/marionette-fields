@@ -84,7 +84,7 @@ var FormView = Mn.View.extend({
   },
 
   bindings: {
-    'state.valid': {
+    'state.validated': {
       type: 'booleanClass',
       name: 'was-validated',
       selector: 'form'
@@ -191,6 +191,7 @@ var FormView = Mn.View.extend({
   handleSubmit: function(e) {
     this.beforeSubmit();
     this.checkValid();
+    this.state.validated = true;
     if (!this.state.valid) {
       e.preventDefault();
       return false;

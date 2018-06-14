@@ -5,7 +5,8 @@ var result = require('lodash/result');
 
 var FormState = State.extend({
   session: {
-    valid: ['boolean', false, false]
+    valid: ['boolean', false, false],
+    validated: ['boolean', false, false]
   },
 
   derived: {

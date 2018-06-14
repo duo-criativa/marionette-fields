@@ -81,14 +81,7 @@ describe('FormView', function() {
 
       form.render();
 
-      expect(form.state.valid).toBe(false);
-      expect(hasClass(form.el, 'was-validated')).toBeFalsy();
-
-      form.getField('client_name', true).setValue('test');
-      form.handleSubmit(document.createEvent('Event'));
-
-      expect(form.state.valid).toBe(true);
-      expect(hasClass(form.el, 'was-validated')).toBeTruthy();
+      expect(form.getFieldsArray().length).toBe(1);
 
     });
 
@@ -96,27 +89,70 @@ describe('FormView', function() {
 
   describe('render', function() {
 
-    var form = new (FormView.extend({
-      fields: [
-        new InputView({
-          name: 'client_name',
-          label: 'App Name',
-          placeholder: 'My Awesome App',
-          // an initial value if it has one
-          value: 'hello',
-          // this one takes an array of tests
-          tests: [
-            function (val) {
-              if (val.length < 5) return "Must be 5+ characters.";
-            }
-          ]
-        })
-      ]
-    }));
+    test('should have HTML like this', function() {
+      var form = new (FormView.extend({
+        fields: [
+          new InputView({
+            name: 'client_name',
+            label: 'App Name',
+            placeholder: 'My Awesome App',
+            // an initial value if it has one
+            value: 'hello',
+            // this one takes an array of tests
+            tests: [
+              function (val) {
+                if (val.length < 5) return "Must be 5+ characters.";
+              }
+            ]
+          })
+        ]
+      }));
 
-    form.render();
+      form.render();
 
-    expect(form.el.outerHTML).toMatchSnapshot();
+      expect(form.el.outerHTML).toMatchSnapshot();
+    });
+
+    test('should add was-validated class to form element', function() {
+
+      var form = new FormView({
+        fields: [
+          new InputView({
+            name: 'name',
+            label: 'Your name',
+            required: true
+          }),
+          new InputView({
+            name: 'age',
+            label: 'Your age',
+            required: true,
+            tests: [
+                function(value){
+                  return 'Your age is not valid!';
+                }
+            ]
+          })
+        ]
+      });
+
+      form.render();
+
+      expect(form.state.valid).toBe(false);
+      expect(form.state.validated).toBe(false);
+      expect(hasClass(form.el, 'was-validated')).toBeFalsy();
+
+      expect(form.el).toMatchSnapshot();
+
+      form.getField('name', true).setValue('test');
+      form.handleSubmit(document.createEvent('Event'));
+
+      expect(form.state.valid).toBe(false);
+      expect(form.state.validated).toBe(true);
+      expect(hasClass(form.el, 'was-validated')).toBeTruthy();
+
+      expect(form.el).toMatchSnapshot();
+
+    });
 
   });
 
