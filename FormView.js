@@ -199,7 +199,7 @@ var FormView = Mn.View.extend({
 
     if (this.preventDefault) {
       e.preventDefault();
-      this.trigger('submit', this.data);
+      this.trigger('submit', this.state.data);
       return false;
     }
   },
