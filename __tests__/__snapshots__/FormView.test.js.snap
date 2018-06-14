@@ -34,7 +34,9 @@ exports[`FormView render should add was-validated class to form element 1`] = `
         data-anddom-hidden="true"
         data-hook="validation-message"
         style="display: none;"
-      />
+      >
+        This field is required.
+      </div>
     </div>
   </div>
   <div
@@ -69,7 +71,9 @@ exports[`FormView render should add was-validated class to form element 1`] = `
         data-anddom-hidden="true"
         data-hook="validation-message"
         style="display: none;"
-      />
+      >
+        This field is required.
+      </div>
     </div>
   </div>
 </form>
@@ -145,7 +149,9 @@ exports[`FormView render should add was-validated class to form element 2`] = `
         data-anddom-display=""
         data-hook="validation-message"
         style=""
-      />
+      >
+        This field is required.
+      </div>
     </div>
   </div>
 </form>

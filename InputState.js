@@ -19,7 +19,7 @@ var InputState = State.extend({
     readonly: ['boolean', true, false],
     autofocus: ['boolean', true, false],
     shouldValidate: ['boolean', true, false],
-    message: ['string', true, ''],
+    validationMessage: ['string', true, ''],
     requiredMessage: ['string', true, 'This field is required.'],
     validClass: ['string', true, 'is-valid'],
     invalidClass: ['string', true, 'is-invalid'],
@@ -48,9 +48,9 @@ var InputState = State.extend({
       }
     },
     showMessage: {
-      deps: ['message', 'shouldValidate'],
+      deps: ['validationMessage', 'shouldValidate'],
       fn: function () {
-        return this.shouldValidate && this.message;
+        return this.shouldValidate && this.validationMessage;
       }
     },
     changed: {
@@ -91,7 +91,7 @@ var InputState = State.extend({
       // on.
       this.shouldValidate = true;
     }
-    this.message = errorMessage;
+    this.validationMessage = errorMessage;
     return errorMessage;
   },
 
