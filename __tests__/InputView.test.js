@@ -221,7 +221,7 @@ describe('InputView', function() {
       input.render();
 
       var inputElement = input.el.querySelector('input');
-      var messageContainer = input.el.querySelector('[data-hook=message-container]');
+      var messageContainer = input.el.querySelector('[data-hook=validation-message]');
 
       expect(isHidden(messageContainer)).toBeTruthy();
 
@@ -264,7 +264,7 @@ describe('InputView', function() {
         input.render();
 
         var inputElement = input.el.querySelector('input');
-        var messageContainer = input.el.querySelector('[data-hook=message-container]');
+        var messageContainer = input.el.querySelector('[data-hook=validation-message]');
 
         //"Trigger change events"
         //TODO: this should be real dom events
@@ -274,8 +274,8 @@ describe('InputView', function() {
         // At this point we are not yet blurred so there should no messages or classes
         expect(input.isValid()).toBeFalsy(); //'Input should be invalid'
         expect(isHidden(messageContainer)).toBeTruthy();  //'Message should not be visible'
-        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
-        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Doest not have valid class'
+        expect(hasClass(inputElement, 'is-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Doest not have valid class'
 
         // Another change to an empty state
         inputElement.value = '';
@@ -285,8 +285,8 @@ describe('InputView', function() {
         // should still not show errors
         expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
         expect(isHidden(messageContainer)).toBeTruthy(); // 'Message should not be visible'
-        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
-        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Doest not have valid class'
+        expect(hasClass(inputElement, 'is-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Doest not have valid class'
 
         // Blur to trigger invalid message/class
         inputElement.value = 'O';
@@ -295,8 +295,8 @@ describe('InputView', function() {
 
         expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
         expect(isHidden(messageContainer)).toBeFalsy(); // 'Message should be visible'
-        expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Has invalid class'
-        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Does not have valid class'
+        expect(hasClass(inputElement, 'is-invalid')).toBeTruthy(); // 'Has invalid class'
+        expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Does not have valid class'
 
         //"Trigger change events again"
         inputElement.value = 'Once upon a time!';
@@ -305,8 +305,8 @@ describe('InputView', function() {
 
         expect(input.isValid()).toBeTruthy(); // 'Input should be valid'
         expect(isHidden(messageContainer)).toBeTruthy(); // 'Message should not be visible'
-        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
-        expect(hasClass(inputElement, 'input-valid')).toBeTruthy(); // 'Has valid class'
+        expect(hasClass(inputElement, 'is-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'is-valid')).toBeTruthy(); // 'Has valid class'
       });
 
     });
@@ -321,11 +321,10 @@ describe('InputView', function() {
       input.render();
       var inputElement = input.el.querySelector('input');
       input.beforeSubmit();
-      console.info('classList',input.el.classList);
-      expect(hasClass(input.el.querySelector('label'), 'input-invalid')).toBeTruthy(); // 'Label has invalid class'
-      expect(hasClass(input.el.querySelector('label'), 'input-valid')).toBeFalsy(); // 'Label does not have valid class'
-      expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Input does not have invalid class'
-      expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Input does not have valid class'
+      expect(hasClass(input.el.querySelector('label'), 'is-invalid')).toBeTruthy(); // 'Label has invalid class'
+      expect(hasClass(input.el.querySelector('label'), 'is-valid')).toBeFalsy(); // 'Label does not have valid class'
+      expect(hasClass(inputElement, 'is-invalid')).toBeFalsy(); // 'Input does not have invalid class'
+      expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Input does not have valid class'
 
       input = new InputView({
         name: 'title',
@@ -336,10 +335,10 @@ describe('InputView', function() {
       input.render();
       inputElement = input.el.querySelector('input');
       input.beforeSubmit();
-      expect(hasClass(input.el.querySelector('label'), 'input-invalid')).toBeTruthy(); // 'Label has invalid class'
-      expect(hasClass(input.el.querySelector('label'), 'input-valid')).toBeFalsy(); // 'Label does not have valid class'
-      expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Input has invalid class'
-      expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Input does not have valid class'
+      expect(hasClass(input.el.querySelector('label'), 'is-invalid')).toBeTruthy(); // 'Label has invalid class'
+      expect(hasClass(input.el.querySelector('label'), 'is-valid')).toBeFalsy(); // 'Label does not have valid class'
+      expect(hasClass(inputElement, 'is-invalid')).toBeTruthy(); // 'Input has invalid class'
+      expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Input does not have valid class'
 
     });
 
@@ -358,7 +357,7 @@ describe('InputView', function() {
         input.render();
 
         var inputElement = input.el.querySelector('input');
-        var messageContainer = input.el.querySelector('[data-hook=message-container]');
+        var messageContainer = input.el.querySelector('[data-hook=validation-message]');
 
         // "Trigger submit on the input"
         // TODO: should we pull in form-view and do a dom submit event?
@@ -366,8 +365,8 @@ describe('InputView', function() {
 
         expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
         expect(isHidden(messageContainer)).toBeFalsy(); // 'Message should be visible'
-        expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Has invalid class'
-        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Does not have valid class'
+        expect(hasClass(inputElement, 'is-invalid')).toBeTruthy(); // 'Has invalid class'
+        expect(hasClass(inputElement, 'is-valid')).toBeFalsy(); // 'Does not have valid class'
       });
 
     });
@@ -377,14 +376,15 @@ describe('InputView', function() {
 
       input.render();
 
-      expect(input.$('[data-hook=help-message]').css('display')).toBe('none');
-      expect(input.$('[data-hook=help-message]').text()).toBe('');
+      var helpMessage = input.el.querySelector('[data-hook=help-message]');
+
+      expect(isHidden(helpMessage)).toBeTruthy();
+      expect(helpMessage.textContent).toBe('');
 
       input.state.helpMessage = 'This is a tip.';
 
-      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
-      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
-
+      expect(isHidden(helpMessage)).toBeFalsy();
+      expect(helpMessage.textContent).toBe('This is a tip.');
     });
 
     test('initialize with `helpMessage`', function() {
@@ -392,9 +392,10 @@ describe('InputView', function() {
 
       input.render();
 
-      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
-      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
+      var helpMessage = input.el.querySelector('[data-hook=help-message]');
 
+      expect(isHidden(helpMessage)).toBeFalsy();
+      expect(helpMessage.textContent).toBe('This is a tip.');
     });
 
     test('extend with `helpMessage`', function() {
@@ -402,9 +403,10 @@ describe('InputView', function() {
 
       input.render();
 
-      expect(input.$('[data-hook=help-message]').css('display')).toBe('block');
-      expect(input.$('[data-hook=help-message]').text()).toBe('This is a tip.');
+      var helpMessage = input.el.querySelector('[data-hook=help-message]');
 
+      expect(isHidden(helpMessage)).toBeFalsy();
+      expect(helpMessage.textContent).toBe('This is a tip.');
     });
 
   });

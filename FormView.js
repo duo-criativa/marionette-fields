@@ -79,7 +79,16 @@ var FormView = Mn.View.extend({
         }
         self.showChildView(name, fields[name]);
       }
+      self.bindit();
     });
+  },
+
+  bindings: {
+    'state.valid': {
+      type: 'booleanClass',
+      name: 'was-validated',
+      selector: 'form'
+    }
   },
 
   addField: function(fieldView) {
@@ -98,9 +107,9 @@ var FormView = Mn.View.extend({
   },
 
   getField: function(fieldName, strict) {
-    var field = this.getFields()[name];
+    var field = this.getFields()[fieldName];
     if (!field && strict) {
-      throw new ReferenceError('field name  "' + name + '" not found');
+      throw new ReferenceError('field name  "' + fieldName + '" not found');
     }
     return field;
   },

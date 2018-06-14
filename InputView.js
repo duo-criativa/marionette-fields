@@ -19,10 +19,8 @@ var InputView = Mn.View.extend({
     return  [
       '<label data-hook="label"></label>',
       '<input class="form-control">',
-      '<p data-hook="help-message"></p>',
-      '<div data-hook="message-container" class="message message-below message-error">',
-      '<p data-hook="message-text"></p>',
-      '</div>',
+      '<small data-hook="help-message"></small>',
+      '<div data-hook="validation-message"></div>',
     ].join('');
   },
   bindings: {
@@ -74,13 +72,13 @@ var InputView = Mn.View.extend({
         hook: 'label'
       }
     ],
-    'state.message': {
+    'state.validationMessage': {
       type: 'text',
-      hook: 'message-text'
+      hook: 'validation-message'
     },
     'state.showMessage': {
       type: 'toggle',
-      hook: 'message-container'
+      hook: 'validation-message'
     },
     'state.placeholder': {
       type: 'attribute',

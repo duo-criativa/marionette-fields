@@ -2,6 +2,13 @@ var Mn = require('backbone.marionette');
 var FormView = require('../FormView');
 var InputView = require('../InputView');
 
+function isHidden(el) {
+  return el.style.display === 'none';
+}
+
+function hasClass(el, klass) {
+  return el.classList.contains(klass);
+}
 
 /*function FakeField(opts) {
   opts = opts || {};
@@ -73,6 +80,15 @@ describe('FormView', function() {
       }));
 
       form.render();
+
+      expect(form.state.valid).toBe(false);
+      expect(hasClass(form.el, 'was-validated')).toBeFalsy();
+
+      form.getField('client_name', true).setValue('test');
+      form.handleSubmit(document.createEvent('Event'));
+
+      expect(form.state.valid).toBe(true);
+      expect(hasClass(form.el, 'was-validated')).toBeTruthy();
 
     });
 
