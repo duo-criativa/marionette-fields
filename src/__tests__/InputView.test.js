@@ -220,20 +220,126 @@ describe('InputView', function() {
 
       input.render();
 
-      // var inputElement = input.el.querySelector('input');
-      // var messageContainer = input.el.querySelector('[data-hook=message-container]');
+      var inputElement = input.el.querySelector('input');
+      var messageContainer = input.el.querySelector('[data-hook=message-container]');
 
-      expect(input.$('[data-hook=message-container]').css('display')).toBe('none');
+      expect(isHidden(messageContainer)).toBeTruthy();
 
-      // inputElement.value = 1;
-      // input.handleInputChanged();
-      // input.handleChange();
-      // t.ok(isHidden(messageContainer), 'Message should not be visible');
-      //
-      // inputElement.value = 0;
-      // input.handleInputChanged();
-      // input.handleChange();
-      // t.ok(isHidden(messageContainer), 'Message should not be visible');
+      inputElement.value = 1;
+      input.handleInputChanged();
+      input.handleChange();
+      expect(isHidden(messageContainer)).toBeTruthy();
+
+      inputElement.value = 0;
+      input.handleInputChanged();
+      input.handleChange();
+      expect(isHidden(messageContainer)).toBeTruthy();
+
+    });
+
+
+    test('Tests with required true and false', function () {
+      var inputs = [
+        new InputView({
+          name: 'title',
+          required: true,
+          tests: [
+            function (val) {
+              if (val.length < 5) return 'Must be 5+ characters.';
+            }
+          ]
+        }),
+        new InputView({
+          name: 'title',
+          required: false,
+          tests: [
+            function (val) {
+              if (val.length < 5) return 'Must be 5+ characters.';
+            }
+          ]
+        }),
+      ];
+
+      inputs.forEach(function (input) {
+        input.render();
+
+        var inputElement = input.el.querySelector('input');
+        var messageContainer = input.el.querySelector('[data-hook=message-container]');
+
+        //"Trigger change events"
+        //TODO: this should be real dom events
+        inputElement.value = 'O';
+        input.handleInputChanged();
+
+        // At this point we are not yet blurred so there should no messages or classes
+        expect(input.isValid()).toBeFalsy(); //'Input should be invalid'
+        expect(isHidden(messageContainer)).toBeTruthy();  //'Message should not be visible'
+        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Doest not have valid class'
+
+        // Another change to an empty state
+        inputElement.value = '';
+        input.handleInputChanged();
+
+
+        // should still not show errors
+        expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
+        expect(isHidden(messageContainer)).toBeTruthy(); // 'Message should not be visible'
+        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Doest not have valid class'
+
+        // Blur to trigger invalid message/class
+        inputElement.value = 'O';
+        input.handleInputChanged();
+        input.handleChange();
+
+        expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
+        expect(isHidden(messageContainer)).toBeFalsy(); // 'Message should be visible'
+        expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Has invalid class'
+        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Does not have valid class'
+
+        //"Trigger change events again"
+        inputElement.value = 'Once upon a time!';
+        input.handleInputChanged();
+        input.handleChange();
+
+        expect(input.isValid()).toBeTruthy(); // 'Input should be valid'
+        expect(isHidden(messageContainer)).toBeTruthy(); // 'Message should not be visible'
+        expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Does not have invalid class'
+        expect(hasClass(inputElement, 'input-valid')).toBeTruthy(); // 'Has valid class'
+      });
+
+    });
+
+    test ('validityClassSelector', function () {
+      var input = new InputView({
+        name: 'title',
+        validityClassSelector: 'label',
+        required: true
+      });
+
+      input.render();
+      var inputElement = input.el.querySelector('input');
+      input.beforeSubmit();
+      console.info('classList',input.el.classList);
+      expect(hasClass(input.el.querySelector('label'), 'input-invalid')).toBeTruthy(); // 'Label has invalid class'
+      expect(hasClass(input.el.querySelector('label'), 'input-valid')).toBeFalsy(); // 'Label does not have valid class'
+      expect(hasClass(inputElement, 'input-invalid')).toBeFalsy(); // 'Input does not have invalid class'
+      expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Input does not have valid class'
+
+      input = new InputView({
+        name: 'title',
+        validityClassSelector: 'label, input',
+        required: true
+      });
+
+      input.render();
+      inputElement = input.el.querySelector('input');
+      input.beforeSubmit();
+      expect(hasClass(input.el.querySelector('label'), 'input-invalid')).toBeTruthy(); // 'Label has invalid class'
+      expect(hasClass(input.el.querySelector('label'), 'input-valid')).toBeFalsy(); // 'Label does not have valid class'
+      expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Input has invalid class'
+      expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Input does not have valid class'
 
     });
 

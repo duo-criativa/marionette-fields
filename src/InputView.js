@@ -11,6 +11,10 @@ var InputView = Mn.View.extend({
   ui: {
     input: 'input'
   },
+  events: {
+    'input @ui.input': 'handleInputChanged',
+    'change @ui.input': 'handleChange'
+  },
   template: function() {
     return  [
       '<label data-hook="label"></label>',
@@ -116,8 +120,8 @@ var InputView = Mn.View.extend({
     this.state.tests = this.tests || spec.tests || [];
     this.state.helpMessage = this.helpMessage || spec.helpMessage || '';
     this.listenTo(this.state, 'change:type', this.handleTypeChange, this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleInputChanged = this.handleInputChanged.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleInputChanged = this.handleInputChanged.bind(this);
     var value = !spec.value && spec.value !== 0 ? '' : spec.value;
     this.state.startingValue = value;
     this.state.inputValue = value;
@@ -187,10 +191,10 @@ var InputView = Mn.View.extend({
   },
   //`input` event handler
   handleInputChanged: function () {
-    if (document.activeElement === this.input) {
+    if (document.activeElement === this.ui.input) {
       this.state.directlyEdited = true;
     }
-    this.state.inputValue = this.clean(this.input.value);
+    this.state.inputValue = this.clean(this.ui.input.val());
   },
   //`change` event handler
   handleChange: function () {
@@ -211,15 +215,6 @@ var InputView = Mn.View.extend({
     this.state.shouldValidate = true;
     this.runTests();
   },
-  /*initInputBindings: function () {
-    this.input.addEventListener('input', this.handleInputChanged, false);
-    this.input.addEventListener('change', this.handleChange,false);
-  },
-  remove: function () {
-    this.input.removeEventListener('input', this.handleInputChanged, false);
-    this.input.removeEventListener('change', this.handleChange, false);
-    View.prototype.remove.apply(this, arguments);
-  },*/
   reset: function () {
     this.setValue(this.state.startingValue, true); //Skip validation just like on initial render
   },
