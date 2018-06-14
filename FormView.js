@@ -2,12 +2,14 @@
 // var Bb = require('backbone');
 var Mn = require('backbone.marionette');
 require('marionette-bindings');
+var FormState = require('./FormState');
 // var bindings = require('ampersand-dom-bindings');
 // var getPath = require('lodash/get');
 // var last = require("lodash/last");
 
 var FormView = Mn.View.extend({
   tagName: 'form',
+  stateClass: FormState,
   buildFieldTemplate: function(fieldName) {
     return '<div data-hook="field-' + fieldName + '"></div>';
   },
@@ -44,6 +46,9 @@ var FormView = Mn.View.extend({
   },
 
   initializeForm: function(options) {
+    this.stateClass = options.StateClass || this.stateClass;
+    this.state = new (this.stateClass);
+    this.state._formView = this;
 
     this.validCallback = options.validCallback || this.validCallback;
     this.submitCallback = options.submitCallback || this.submitCallback;
@@ -56,7 +61,7 @@ var FormView = Mn.View.extend({
     if (options.values) this._startingValues = options.values;
 
     if (this.validCallback) {
-      this.listenTo(this, 'valid', function(view, validBool) {
+      this.listenTo(this.state, 'change:valid', function(state, validBool) {
         this.validCallback(validBool);
       });
     }
@@ -152,10 +157,10 @@ var FormView = Mn.View.extend({
   },
 
   checkValid: function() {
-    this.valid = this.getFieldsArray().every(function(field) {
+    this.state.valid = this.getFieldsArray().every(function(field) {
       return field.isValid();
     });
-    return this.valid;
+    return this.state.valid;
   },
 
   beforeSubmit: function() {
@@ -165,19 +170,19 @@ var FormView = Mn.View.extend({
   },
 
   update: function(field) {
-    this.trigger('change:' + field.getName(), field);
+    this.triggerMethod('change:' + field.getName(), field);
     // if this one's good check 'em all
     if (field.isValid()) {
       this.checkValid();
     } else {
-      this.valid = false;
+      this.state.valid = false;
     }
   },
 
   handleSubmit: function(e) {
     this.beforeSubmit();
     this.checkValid();
-    if (!this.valid) {
+    if (!this.state.valid) {
       e.preventDefault();
       return false;
     }

@@ -2,7 +2,7 @@
   "name": "marionette-fields",
   "version": "0.1.1",
   "description": "Trying to easy the form creation and maintainability of forms inside a Marionete view.",
-  "main": "src/FormView.js",
+  "main": "FormView.js",
   "scripts": {
     "test": "./node_modules/.bin/jest --verbose --coverage",
     "test:update": "./node_modules/.bin/jest --verbose --coverage --updateSnapshot",
