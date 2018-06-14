@@ -231,7 +231,10 @@ var InputView = Mn.View.extend({
     return this.state.getErrorMessage();
   },
   runTests: function() {
-    return this.state.runTests();
+    const result = this.state.runTests();
+    // Setup HTML5 custom validation (https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation)
+    this.ui.input.get(0).setCustomValidity(result);
+    return result;
   },
   isValid: function() {
     return this.state.valid;
