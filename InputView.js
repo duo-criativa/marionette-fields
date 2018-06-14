@@ -24,17 +24,6 @@ var InputView = Mn.View.extend({
     ].join('');
   },
   bindings: {
-    'state.inputValue': [
-      {
-        type: 'attribute',
-        selector: 'input',
-        name: 'value'
-      },
-      {
-        type: 'text',
-        selector: 'textarea',
-      }
-    ],
     'state.name': {
       type: 'attribute',
       selector: 'input, textarea',
@@ -148,10 +137,10 @@ var InputView = Mn.View.extend({
     /*this.renderWithTemplate();
     this.input = this.query('input') || this.query('textarea');
     // switches out input for textarea if that's what we want
-    this.initInputBindings();
+    this.initInputBindings();*/
     // Skip validation on initial setValue
     // if the field is not required
-    this.setValue(this.inputValue, !this.state.required);*/
+    this.setValue(this.inputValue, !this.state.required);
 
     this.bindit();
   },
@@ -187,7 +176,7 @@ var InputView = Mn.View.extend({
   },
   //`input` event handler
   handleInputChanged: function () {
-    if (document.activeElement === this.ui.input) {
+    if (document.activeElement === this.ui.input.get(0)) {
       this.state.directlyEdited = true;
     }
     this.state.inputValue = this.clean(this.ui.input.val());
