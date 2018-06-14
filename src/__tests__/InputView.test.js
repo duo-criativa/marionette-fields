@@ -343,6 +343,35 @@ describe('InputView', function() {
 
     });
 
+    test('inputClass is present on submit even if unchanged', function () {
+      [
+        new InputView({
+          name: 'title',
+          required: true
+        }),
+        new InputView({
+          name: 'title',
+          required: true,
+          value: ''
+        })
+      ].forEach(function (input) {
+        input.render();
+
+        var inputElement = input.el.querySelector('input');
+        var messageContainer = input.el.querySelector('[data-hook=message-container]');
+
+        // "Trigger submit on the input"
+        // TODO: should we pull in form-view and do a dom submit event?
+        input.beforeSubmit();
+
+        expect(input.isValid()).toBeFalsy(); // 'Input should be invalid'
+        expect(isHidden(messageContainer)).toBeFalsy(); // 'Message should be visible'
+        expect(hasClass(inputElement, 'input-invalid')).toBeTruthy(); // 'Has invalid class'
+        expect(hasClass(inputElement, 'input-valid')).toBeFalsy(); // 'Does not have valid class'
+      });
+
+    });
+
     test('should show `helpMessage`', function() {
       var input = new InputView({});
 

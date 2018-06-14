@@ -108,15 +108,13 @@ var InputView = Mn.View.extend({
       }
     ]
   },
-  buildState: function() {
-    return new InputState();
-  },
+  stateClass: InputState,
   initialize: function (spec) {
     spec || (spec = {});
     if (spec.parent) {
       this.parent = spec.parent;
     }
-    this.state = this.buildState();
+    this.state = new (this.stateClass);
     this.state.tests = this.tests || spec.tests || [];
     this.state.helpMessage = this.helpMessage || spec.helpMessage || '';
     this.listenTo(this.state, 'change:type', this.handleTypeChange, this);
