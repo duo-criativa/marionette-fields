@@ -153,7 +153,7 @@ var FormView = Mn.View.extend({
 
   checkValid: function() {
     this.valid = this.getFieldsArray().every(function(field) {
-      return field.valid;
+      return field.isValid();
     });
     return this.valid;
   },
@@ -167,7 +167,7 @@ var FormView = Mn.View.extend({
   update: function(field) {
     this.trigger('change:' + field.getName(), field);
     // if this one's good check 'em all
-    if (field.valid) {
+    if (field.isValid()) {
       this.checkValid();
     } else {
       this.valid = false;
