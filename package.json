@@ -1,6 +1,6 @@
 {
   "name": "marionette-fields",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "Trying to easy the form creation and maintainability of forms inside a Marionete view.",
   "main": "src/FormView.js",
   "scripts": {
