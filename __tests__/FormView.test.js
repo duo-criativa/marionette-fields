@@ -90,7 +90,7 @@ describe('FormView', function() {
   describe('render', function() {
 
     test('should have HTML like this', function() {
-      var form = new (FormView.extend({
+      var form = new FormView({
         fields: [
           new InputView({
             name: 'client_name',
@@ -106,7 +106,7 @@ describe('FormView', function() {
             ]
           })
         ]
-      }));
+      });
 
       form.render();
 

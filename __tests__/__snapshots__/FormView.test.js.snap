@@ -21,7 +21,6 @@ exports[`FormView render should add was-validated class to form element 1`] = `
         placeholder=""
         tabindex="0"
         type="text"
-        value=""
       />
       <small
         data-anddom-display=""
@@ -58,7 +57,6 @@ exports[`FormView render should add was-validated class to form element 1`] = `
         placeholder=""
         tabindex="0"
         type="text"
-        value=""
       />
       <small
         data-anddom-display=""
@@ -102,7 +100,6 @@ exports[`FormView render should add was-validated class to form element 2`] = `
         placeholder=""
         tabindex="0"
         type="text"
-        value="test"
       />
       <small
         data-anddom-display=""
@@ -137,7 +134,6 @@ exports[`FormView render should add was-validated class to form element 2`] = `
         placeholder=""
         tabindex="0"
         type="text"
-        value=""
       />
       <small
         data-anddom-display=""
@@ -157,4 +153,4 @@ exports[`FormView render should add was-validated class to form element 2`] = `
 </form>
 `;
 
-exports[`FormView render should have HTML like this 1`] = `"<form><div data-hook=\\"field-client_name\\"><div class=\\"form-group\\"><label data-hook=\\"label\\" for=\\"form_field_client_name\\">App Name</label><input class=\\"form-control\\" value=\\"hello\\" name=\\"client_name\\" type=\\"text\\" tabindex=\\"0\\" id=\\"form_field_client_name\\" placeholder=\\"My Awesome App\\"><small data-hook=\\"help-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></small><div data-hook=\\"validation-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></div></div></div></form>"`;
+exports[`FormView render should have HTML like this 1`] = `"<form><div data-hook=\\"field-client_name\\"><div class=\\"form-group\\"><label data-hook=\\"label\\" for=\\"form_field_client_name\\">App Name</label><input class=\\"form-control\\" name=\\"client_name\\" type=\\"text\\" tabindex=\\"0\\" id=\\"form_field_client_name\\" placeholder=\\"My Awesome App\\"><small data-hook=\\"help-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></small><div data-hook=\\"validation-message\\" data-anddom-display=\\"\\" data-anddom-hidden=\\"true\\" style=\\"display: none;\\"></div></div></div></form>"`;

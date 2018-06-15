@@ -1,7 +1,7 @@
 var pick = require('lodash/pick');
 var Mn = require('backbone.marionette');
 var InputState = require('./InputState');
-require('marionette-bindings');
+var DataBinder = require('marionette-bindings');
 
 
 
@@ -24,22 +24,22 @@ var InputView = Mn.View.extend({
     ].join('');
   },
   bindings: {
-    'state.name': {
+    'name': {
       type: 'attribute',
       selector: 'input, textarea',
       name: 'name'
     },
-    'state.type': {
+    'type': {
       type: 'attribute',
       selector: 'input',
       name: 'type'
     },
-    'state.tabindex': {
+    'tabindex': {
       type: 'attribute',
       selector: 'input, textarea',
       name: 'tabindex'
     },
-    'state.html_id': [
+    'html_id': [
       {
         type: 'attribute',
         selector: 'input, textarea',
@@ -51,7 +51,7 @@ var InputView = Mn.View.extend({
         name: 'for'
       }
     ],
-    'state.label': [
+    'label': [
       {
         hook: 'label',
         type: 'text'
@@ -61,30 +61,30 @@ var InputView = Mn.View.extend({
         hook: 'label'
       }
     ],
-    'state.validationMessage': {
+    'validationMessage': {
       type: 'text',
       hook: 'validation-message'
     },
-    'state.showMessage': {
+    'showMessage': {
       type: 'toggle',
       hook: 'validation-message'
     },
-    'state.placeholder': {
+    'placeholder': {
       type: 'attribute',
       selector: 'input, textarea',
       name: 'placeholder'
     },
-    'state.readonly': {
+    'readonly': {
       type: 'booleanAttribute',
       name: 'readonly',
       selector: 'input, textarea'
     },
-    'state.autofocus': {
+    'autofocus': {
       type: 'booleanAttribute',
       name: 'autofocus',
       selector: 'input, textarea'
     },
-    'state.helpMessage': [
+    'helpMessage': [
       {
         type: 'toggle',
         hook: 'help-message'
@@ -122,6 +122,20 @@ var InputView = Mn.View.extend({
     }
 
     this.state.set(spec);
+
+    var self = this;
+    this.listenTo(this, 'render', function () {
+      self.handleTypeChange();
+      /*self.renderWithTemplate();
+      self.input = self.query('input') || self.query('textarea');
+      // switches out input for textarea if that's what we want
+      self.initInputBindings();*/
+      // Skip validation on initial setValue
+      // if the field is not required
+      self.setValue(self.state.inputValue, !self.state.required);
+
+      DataBinder.bind(self, self.state, self.bindings);
+    });
   },
 
   getName: function() {
@@ -130,19 +144,6 @@ var InputView = Mn.View.extend({
 
   getValue: function() {
     return this.state.value;
-  },
-
-  onRender: function () {
-    this.handleTypeChange();
-    /*this.renderWithTemplate();
-    this.input = this.query('input') || this.query('textarea');
-    // switches out input for textarea if that's what we want
-    this.initInputBindings();*/
-    // Skip validation on initial setValue
-    // if the field is not required
-    this.setValue(this.inputValue, !this.state.required);
-
-    this.bindit();
   },
 
   setValue: function (value, skipValidation) {

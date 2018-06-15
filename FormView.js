@@ -1,7 +1,7 @@
 // var _ = require('underscore');
 // var Bb = require('backbone');
 var Mn = require('backbone.marionette');
-require('marionette-bindings');
+var DataBinder = require('marionette-bindings');
 var FormState = require('./FormState');
 // var bindings = require('ampersand-dom-bindings');
 // var getPath = require('lodash/get');
@@ -79,12 +79,12 @@ var FormView = Mn.View.extend({
         }
         self.showChildView(name, fields[name]);
       }
-      self.bindit();
+      DataBinder.bind(self, self.state, self.bindings);
     });
   },
 
   bindings: {
-    'state.validated': {
+    'validated': {
       type: 'booleanClass',
       name: 'was-validated',
       selector: 'form'
