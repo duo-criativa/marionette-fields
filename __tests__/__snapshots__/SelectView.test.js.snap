@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectView requirements It should also store a \`value\` property if passed in as part of the config/options object when the view is created. 1`] = `
+<div
+  class="form-group"
+>
+  <label
+    data-hook="label"
+    for="form_field_color"
+  >
+    Color
+  </label>
+  <select
+    class="form-control"
+    id="form_field_color"
+    name="color"
+    tabindex="0"
+  >
+    <option
+      value="10"
+    >
+      blue
+    </option>
+    <option
+      value="20"
+    >
+      yellow
+    </option>
+    <option
+      value="30"
+    >
+      black
+    </option>
+  </select>
+  <small
+    data-anddom-display=""
+    data-anddom-hidden="true"
+    data-hook="help-message"
+    style="display: none;"
+  />
+  <div
+    data-anddom-display=""
+    data-anddom-hidden="true"
+    data-hook="validation-message"
+    style="display: none;"
+  />
+</div>
+`;
