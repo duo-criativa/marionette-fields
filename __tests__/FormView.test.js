@@ -82,6 +82,7 @@ describe('FormView', function() {
       form.render();
 
       expect(form.getFieldsArray().length).toBe(1);
+      expect(form.hasField('client_name')).toBeTruthy();
 
     });
 
@@ -153,6 +154,29 @@ describe('FormView', function() {
       expect(form.el).toMatchSnapshot();
 
     });
+
+    test('should accept `strict` on `setValues`', function() {
+      var form = new FormView({
+        fields: [
+          new InputView({
+            name: 'client_name',
+            label: 'App Name',
+            placeholder: 'My Awesome App',
+            // an initial value if it has one
+            value: 'hello',
+          })
+        ]
+      });
+
+      expect(form.state.data).toEqual({client_name: 'hello'});
+
+      form.setValues({client_name: 'my name', does_not_exist: 'any value'}, false);
+
+      expect(form.state.data).toEqual({client_name: 'my name'});
+
+      expect(function(){ form.setValues({client_name: 'my name', does_not_exist: 'any value'}, true); }).toThrow();
+    });
+
 
   });
 

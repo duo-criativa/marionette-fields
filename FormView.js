@@ -135,6 +135,11 @@ var FormView = Mn.View.extend({
     return this._fieldViews;
   },
 
+  hasField: function(fieldName) {
+    this.getFields();
+    return this._fieldViews[fieldName] !== undefined;
+  },
+
   getFieldsArray: function() {
     this.getFields();
     return this._fieldViewsArray;
@@ -152,15 +157,21 @@ var FormView = Mn.View.extend({
     return this.getField(name, true).getValue();
   },
 
-  setValue: function(name, value) {
-    this.getField(name, true).setValue(value);
+  setValue: function(name, value, strict) {
+    if (strict === undefined) {
+      strict = true;
+    }
+    var field = this.getField(name, strict);
+    if (field) {
+      field.setValue(value);
+    }
     return this;
   },
 
-  setValues: function(data) {
+  setValues: function(data, strict) {
     for (var name in data) {
       if (data.hasOwnProperty(name)) {
-        this.setValue(name, data[name]);
+        this.setValue(name, data[name], strict);
       }
     }
   },
